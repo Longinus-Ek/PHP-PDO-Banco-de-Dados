@@ -4,6 +4,7 @@ namespace Alura\Pdo\Infrastructure\Repository;
 
 require_once 'vendor/autoload.php';
 
+use Alura\Pdo\Domain\Model\Phone;
 use PDO;
 use PDOStatement;
 use DateTimeImmutable;
@@ -46,7 +47,7 @@ class PdoStudentRepository implements StudentRepository
         $studentList = [];
 
         foreach($studentDataList as $studentData){
-            $studentList[] = new Student (
+            $student = new Student (
                 $studentData['id'], 
                 $studentData['name'], 
                 new DateTimeImmutable($studentData['birth_date'])
@@ -94,5 +95,26 @@ class PdoStudentRepository implements StudentRepository
         
         return $preparedStatement->execute();
          
+    }
+    public function studentsWithPhones(): array
+    {
+        $sqlQuery = 'SELECT * FROM students JOIN phones ON students.id = phones.student_id;';
+        $stmt = $this->connection->query($sqlQuery);
+        $result = $stmt->fetchAll();
+        $studentList = [];
+        foreach ($result as $row){
+
+            if(!array_key_exists($row['id'], $studentList)){
+                $studentList[$row['id']]=new Student(
+                    $row['id'],
+                    $row['name'],
+                    new DateTimeImmutable($row['birth_date'])
+                );
+            }
+            $phone = new Phone($row['phone_id'], $row['area_code'], $row['number']);
+            $studentList[$row['id']]->addPhone($phone);
+            
+        }
+        return $studentList;
     }
 }
