@@ -11,6 +11,7 @@ use DateTimeInterface;
 use Alura\Pdo\Domain\Model\Student;
 use Alura\Pdo\Domain\Repository\StudentRepository;
 
+
 class PdoStudentRepository implements StudentRepository
 {
 
@@ -41,7 +42,7 @@ class PdoStudentRepository implements StudentRepository
 
     private function hydrateStudentList(PDOStatement $statement) : array
     {
-        $studentDataList = $statement->fetchAll(PDO::FETCH_ASSOC);
+        $studentDataList = $statement->fetchAll();
         $studentList = [];
 
         foreach($studentDataList as $studentData){
@@ -67,6 +68,7 @@ class PdoStudentRepository implements StudentRepository
     {
         $sqlInsert = 'INSERT INTO students (name, birth_date) VALUES (:name, :birth_date);';
         $statement = $this->connection->prepare($sqlInsert);
+
         $statement->bindValue(':name', $student->name());
         $statement->bindValue(':birth_date', $student->birthDate()->format('Y-m-d'));
         $student->defineId($this->connection->lastInsertId());

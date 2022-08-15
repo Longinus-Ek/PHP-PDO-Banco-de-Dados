@@ -15,22 +15,28 @@ $studentRepository = new PdoStudentRepository($connection);
 //Inserir os alunos da turma
 
 $connection->beginTransaction(); // Iniciar uma transação para o banco de dados
+try{
+    $aStudent = new Student(
+        null,
+        'Niko Bellet',
+        new DateTimeImmutable('1950-08-26'),
+    );
+    $studentRepository->save($aStudent);
 
-$aStudent = new Student(
-    null,
-    'Niko Bellet',
-    new DateTimeImmutable('1950-08-26'),
-);
-$studentRepository->save($aStudent);
 
+    $anotherStudent = new Student(
+        null,
+        'Ele elevem',
+        new DateTimeImmutable('1998-05-26'),
+    );
+    $studentRepository->save($anotherStudent);
 
-$anotherStudent = new Student(
-    null,
-    'Ele elevem',
-    new DateTimeImmutable('1998-05-26'),
-);
-$studentRepository->save($anotherStudent);
+    $connection->commit();
 
-// $connection->commit(); // Finalizar uma transação para o banco de dados
+} catch (PDOException $e){
+    echo $e->getMessage();
+    $connection->rollBack;
+}
+// $connection->commit(); // // Finalizar uma transação para o banco de dados
 
-$connection->rollBack(); // Finalizar uma transação e desfazer as alterações
+// $connection->rollBack(); // // Finalizar uma transação e desfazer as alterações
