@@ -10,8 +10,8 @@ $pdo = ConnectionCreator::createConnection();
 
 $student = new Student(
     null, 
-    'Itala Kohler', 
-    new DateTimeImmutable('1998-03-02')
+    'Geraldo Nunes', 
+    new DateTimeImmutable('1995-03-02')
 );
 
 $sqlInsert = "INSERT INTO students (name, birth_date) VALUES (:name, :birth_date);";

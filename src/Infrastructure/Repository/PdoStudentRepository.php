@@ -1,8 +1,8 @@
 <?php 
 
-require_once 'vendor/autoload.php';
-
 namespace Alura\Pdo\Infrastructure\Repository;
+
+require_once 'vendor/autoload.php';
 
 use PDO;
 use PDOStatement;
@@ -15,7 +15,7 @@ class PdoStudentRepository implements StudentRepository
 {
 
     private PDO $connection;
-    
+
     public function __construct(PDO $connection)
     {
         $this->connection = $connection;
@@ -29,7 +29,7 @@ class PdoStudentRepository implements StudentRepository
         return $this->hydrateStudentList($statement);
     }
 
-    public function studentsBirthAt (DateTimeInterface $birthDate) : array
+    public function studentsBirthAt(DateTimeInterface $birthDate) : array
     {
         $sqlSearchBirthDate = 'SELECT * FROM students WHERE birth_date = ?';
         $statement = $this->connection->prepare($sqlSearchBirthDate); 
@@ -68,7 +68,7 @@ class PdoStudentRepository implements StudentRepository
         $sqlInsert = 'INSERT INTO students (name, birth_date) VALUES (:name, :birth_date);';
         $statement = $this->connection->prepare($sqlInsert);
         $statement->bindValue(':name', $student->name());
-        $statement->bindValue(':birth_date', $student->birthDate());
+        $statement->bindValue(':birth_date', $student->birthDate()->format('Y-m-d'));
         $student->defineId($this->connection->lastInsertId());
         return $statement->execute();
     }
