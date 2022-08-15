@@ -1,9 +1,10 @@
 <?php
 
-use Alura\Pdo\Domain\Repository\StudentRepository;
+use Alura\Pdo\Infrastructure\Repository\PdoStudentRepository;
 
-function enviaEmailParaAniversariantes(StudentRepository $studentRepository)
-{
-    $studentList = $studentRepository->studentsBirthAt(new DateTimeImmutable());
+$pdo = new PDO ('sqlite:memory');
 
-}
+$repository = new PdoStudentRepository($pdo);
+
+empty($repository->allStudents());
+

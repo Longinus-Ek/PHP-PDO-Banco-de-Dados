@@ -10,14 +10,15 @@ use DateTimeImmutable;
 use DateTimeInterface;
 use Alura\Pdo\Domain\Model\Student;
 use Alura\Pdo\Domain\Repository\StudentRepository;
-use Alura\Pdo\Infrastructure\Persistence\ConnectionCreator;
 
 class PdoStudentRepository implements StudentRepository
 {
 
-    public function __construct(string $student)
+    private PDO $connection;
+    
+    public function __construct(PDO $connection)
     {
-        $this->connection = ConnectionCreator::CreateConnection();
+        $this->connection = $connection;
     }
 
     public function allStudents() : array
